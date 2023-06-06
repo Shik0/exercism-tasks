@@ -1,5 +1,6 @@
 """Functions to keep track and alter inventory."""
 
+from collections import Counter
 
 def create_inventory(items):
     """Create a dict that tracks the amount (count) of each element on the `items` list.
@@ -8,7 +9,7 @@ def create_inventory(items):
     :return: dict - the inventory dictionary.
     """
 
-    pass
+    return Counter(items)
 
 
 def add_items(inventory, items):
