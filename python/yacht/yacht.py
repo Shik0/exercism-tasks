@@ -1,53 +1,53 @@
-from collections import Counter
+import collections
 
 # Score categories.
 # Change the values as you see fit.
-YACHT = 'yacht'
+YACHT = 0
 ONES = 1
 TWOS = 2
 THREES = 3
 FOURS = 4
 FIVES = 5
 SIXES = 6
-FULL_HOUSE = 'full_hause'
-FOUR_OF_A_KIND = 'four_of_a_kind'
-LITTLE_STRAIGHT = 'little_straight'
-BIG_STRAIGHT = 'big_straight'
-CHOICE = 'choice'
+FULL_HOUSE = 7
+FOUR_OF_A_KIND = 8
+LITTLE_STRAIGHT = 9
+BIG_STRAIGHT = 10
+CHOICE = 11
+
+NUMBERS = [ONES, TWOS, THREES, FOURS, FIVES, SIXES]
 
 
-def score(dice, category):
-    
-    zero = 0
+def score(dice: list[int], category: int) -> int:
+
+    most_common_value, most_common_count = collections.Counter(dice).most_common(1)[0]
 
     # ones - sixes
-    if type(category) is int and category < 30:
-        return sum([d for d in dice if d == category])
+    if category in NUMBERS:
+        return dice.count(category) * category
     
     # full house
-    if category == 'full_hause' and 3 in Counter(dice).values():
+    if category == FULL_HOUSE and set(collections.Counter(dice).values()) == {2, 3}:
         return sum(dice)
     
     # four of a kind
-    if  category == 'four_of_a_kind':
-        for key,value in Counter(dice).items():
-            if value >= 4:
-                return 4 * key
+    if  category == FOUR_OF_A_KIND and most_common_count >= 4:
+        return 4 * most_common_value
             
     # big straight
-    if category == 'big_straight' and sum(dice) == 20:
+    if category == BIG_STRAIGHT and set(dice) == {2, 3, 4, 5, 6}:
         return 30
     
     # little straight
-    if category == 'little_straight' and sum(dice) == 15:
+    if category == LITTLE_STRAIGHT and set(dice) == {1, 2, 3, 4, 5}:
         return 30
     
     # choice
-    if category == 'choice':
+    if category == CHOICE:
         return sum(dice)
     
     # yacht
-    if category == 'yacht' and len(Counter(dice)) == 1:
+    if category == YACHT and len(set(dice)) == 1:
         return 50
 
-    return zero
+    return 0
